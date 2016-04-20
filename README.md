@@ -6,11 +6,13 @@ Simple boto3 based script to get a list of AWS ec2 instances.
 
 Create a `credentials.yml` file and add IAM keys with read only access to EC2 services along with the region. An example file `credentials.default.yml` shows the format to be used for credentials.yml(replace profile1 and profile2 as required and add AWS access and secret keys along with the region). Multiple profiles for separate AWS accounts can be created.
 
-## Usage  
-	usage: aws-inventory [-h] [-p PROFILE] [-l]
+## Usage
+	usage: aws-inventory [-h] [-p PROFILE] [-l] [-o] [-f]
 
-    optional arguments:
-    -h, --help            show this help message and exit
-    -p PROFILE, --profile PROFILE
-                            enter profile name listed under the credentials.yml file
-    -l, --list            print a list of all available profiles
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -p PROFILE, --profile PROFILE
+	                        enter profile name listed under the credentials.yml	file
+	  -l, --list            print a list of all available profiles
+	  -o, --out             print inventory to stdout
+	  -f, --file            create a csv inventory file
