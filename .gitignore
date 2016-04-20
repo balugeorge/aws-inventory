@@ -1,6 +1,10 @@
 # Ignore credentials file
 credentials.yml
 
+# Others
+*.csv
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

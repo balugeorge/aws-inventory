@@ -4,6 +4,7 @@ import argparse
 import yaml
 import botocore.session
 import boto3
+import csv
 parser = argparse.ArgumentParser()
 def inventory():
     access_key, secret_key, region = None, None, None
@@ -29,12 +30,22 @@ def inventory():
     if args.profile:
         ec2 = session.resource('ec2')
         instances = ec2.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values':['running']}])
-        print("instance_id\tinstance_type\tpublic_ip\tprivate_ip")
-        for instance in instances:
-            print(instance.id, instance.instance_type, instance.public_ip_address, instance.private_ip_address, sep='\t')
+        if args.out:
+            print("instance_id\tinstance_type\tpublic_ip\tprivate_ip")
+            for instance in instances:
+                print(instance.id, instance.instance_type, instance.public_ip_address, instance.private_ip_address, sep='\t')
+        elif args.file:
+            open('inventory.csv', 'w').close()
+            with open('inventory.csv', 'a', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=',')
+                writer.writerow(["instance_id","instance_type","public_ip","private_ip"])
+                for instance in instances:
+                    writer.writerow([instance.id, instance.instance_type, instance.public_ip_address, instance.private_ip_address])
 if __name__ == '__main__':
     parser.add_argument('-p', '--profile', help='enter profile name listed under the credentials.yml file')
     parser.add_argument('-l', '--list', help='print a list of all available profiles', action='store_true')
+    parser.add_argument('-o', '--out', help='print inventory to stdout', action='store_true')
+    parser.add_argument('-f', '--file', help='create a csv inventory file', action='store_true')
     args = parser.parse_args()
     if len(sys.argv) == 1:
         parser.print_help()
