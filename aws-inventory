@@ -35,8 +35,9 @@ def inventory():
             for instance in instances:
                 print(instance.id, instance.instance_type, instance.public_ip_address, instance.private_ip_address, sep='\t')
         elif args.file:
-            open('inventory.csv', 'w').close()
-            with open('inventory.csv', 'a', newline='') as csvfile:
+            output_file = "inventory_"+args.profile+".csv"
+            open(output_file, 'w').close()
+            with open(output_file, 'a', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerow(["instance_id","instance_type","public_ip","private_ip"])
                 for instance in instances:
