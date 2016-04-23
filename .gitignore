@@ -4,6 +4,7 @@ credentials.yml
 # Others
 *.csv
 .DS_Store
+.~lock.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
