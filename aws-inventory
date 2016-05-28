@@ -11,15 +11,14 @@ def inventory():
     #Load keys are region from the credentials.yml file
     with open('credentials.yml', 'r') as streams:
         for data in yaml.load_all(streams):
-            if access_key is None:
-                    access_key=data.get(args.profile, {}).get('AWS_ACCESS_KEY_ID')
-            if secret_key is None:
-                    secret_key=data.get(args.profile, {}).get('AWS_SECRET_ACCESS_KEY')
-            if region is None:
-                    region=data.get(args.profile, {}).get('AWS_DEFAULT_REGION')
+            access_key=data.get(args.profile, {}).get('AWS_ACCESS_KEY_ID')
+            secret_key=data.get(args.profile, {}).get('AWS_SECRET_ACCESS_KEY')
+            region=data.get(args.profile, {}).get('AWS_DEFAULT_REGION')
             if args.list:
-                    for profiles in data:
-                        print(profiles)
+                for profiles in data:
+                    print(profiles)
+            if access_key or secret_key or region is not None:
+                break
     #Set session
     session = boto3.session.Session(
         aws_access_key_id=access_key,
@@ -31,9 +30,9 @@ def inventory():
         ec2 = session.resource('ec2')
         instances = ec2.instances.all()
         if args.out:
-            print("instance_id\tinstance_type\tinstance_state\tpublic_ip\tprivate_ip")
+            print('{0:20}{1:20}{2:20}{3:20}{4:20}'.format("instance_id", "instance_type", "instance_state", "public_ip", "private_ip"))
             for instance in instances:
-                print(instance.id, instance.instance_type, instance.state['Name'], instance.public_ip_address, instance.private_ip_address, sep='\t')
+                print('{0!s:20}{1!s:20}{2!s:20}{3!s:20}{4!s:20}'.format(instance.id, instance.instance_type, instance.state['Name'], instance.public_ip_address, instance.private_ip_address))
         elif args.file:
             output_file = "inventory_"+args.profile+".csv"
             open(output_file, 'w').close()
