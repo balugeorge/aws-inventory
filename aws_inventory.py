@@ -19,10 +19,10 @@ class Connect:
         self.data = [out for out in yaml.load_all(streams)]
         # To-do: output error message if profile name is not present in credentials.yml file
         if self.profile is not None:
-            for l in self.data:
-                self.access_key = l.get(self.profile, {}).get('AWS_ACCESS_KEY_ID')
-                self.secret_key = l.get(self.profile, {}).get('AWS_SECRET_ACCESS_KEY')
-                self.region = l.get(self.profile, {}).get('AWS_DEFAULT_REGION')
+            for line in self.data:
+                self.access_key = line.get(self.profile, {}).get('AWS_ACCESS_KEY_ID')
+                self.secret_key = line.get(self.profile, {}).get('AWS_SECRET_ACCESS_KEY')
+                self.region = line.get(self.profile, {}).get('AWS_DEFAULT_REGION')
                 if access_key or secret_key or region is not None:
                     print(access_key, secret_key, region)
                     break
@@ -35,8 +35,8 @@ class Connect:
 
     def profiles(self):
         print("Available profiles are:")
-        for l in self.data:
-            for profile in l:
+        for line in self.data:
+            for profile in line:
                 print(profile)
 
     def inventory(self):
@@ -79,13 +79,13 @@ if __name__ == '__main__':
                         help='''OUTPUT_TYPE should be file for writing inventory list to a csv file,
                         use stdout to print inventory to terminal''')
     args = parser.parse_args()
-    con = Connect()
+    connect = Connect()
     if len(sys.argv) == 1:
         parser.print_help()
     elif args.list:
-        con.profiles()
+        connect.profiles()
     else:
         try:
-            con.inventory()
+            connect.inventory()
         except Exception as e:
             print(str(e))

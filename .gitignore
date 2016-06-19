@@ -5,6 +5,7 @@ credentials.yml
 *.csv
 .DS_Store
 .~lock.*
+.idea
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
